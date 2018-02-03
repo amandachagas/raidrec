@@ -31,7 +31,7 @@ print ratings['movieId'].unique().size()
 training_data, validation_data = gl.recommender.util.random_split_by_user(ratings, 'userId', 'movieId')
 model = gl.recommender.create(training_data, 'userId', 'movieId')
 
-print model
+# print model
 
 print "U U U U U U U U U U U u"
 print items[items['movieId'] == 12]
@@ -66,6 +66,20 @@ recent_data['userId'] = 99999
 
 print "VAI FILHA A A A A A A A A AO"
 print model.recommend(users=[99999], new_observation_data=recent_data).join(items, on='movieId').sort('rank')
+
+print " = = = = = = = = = = = = = = = = = = = = = = "
+print "          - MODEL BASED ON CONTENT -         "
+print " = = = = = = = = = = = = = = = = = = = = = = "
+print items[items['movieId'] == 595]
+print items[items['movieId'] == 597]
+print items[items['movieId'] == 12]
+
+# model_content = gl.recommender.item_content_recommender.get_default_options()
+model_content = gl.recommender.item_content_recommender.create(items, 'movieId', ratings, 'userId')
+print "   #&@!# @&# @#* @ #*@#( *@( #@( #(# (@"
+print model_content.recommend(users=[99999], new_observation_data=recent_data).join(items, on='movieId').sort('rank')
+
+# print model_content.recommend_from_interactions([0])
 
 ### Use the following lines to fast load your data in SFrame format
 # same_items_data = gl.load_sframe('data/items_data')
