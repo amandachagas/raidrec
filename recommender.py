@@ -81,6 +81,12 @@ print model_content.recommend(users=[99999], new_observation_data=recent_data).j
 
 # print model_content.recommend_from_interactions([0])
 
+#>>>use this to export SFrame into json
+#ratings.export_json('data/ratings.json', orient='records')
+import groups as g
+matrix = g.group_by_rated_movies(5, ratings,gl.aggregate)
+print matrix
+
 ### Use the following lines to fast load your data in SFrame format
 # same_items_data = gl.load_sframe('data/items_data')
 # same_ratings_data = gl.load_sframe('data/ratings_data')

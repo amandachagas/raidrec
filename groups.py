@@ -1,6 +1,17 @@
+import random
 #groups users based on the amount k of the same rated movies
-def group_by_rated_movies(k, ratings):
+def group_by_rated_movies(rating_count, ratings, agg):
+    print "<-- Aggregating-->"
     matrix = []
+    movie_id_count = ratings.groupby(key_columns='movieId',operations={'count':agg.COUNT()}).sort('count',ascending=False)
+    #movie_rated_times = movie_id_count['count'].filter(lambda x: x>rating_count)
+
+    # while len(matrix) < k:
+    #     movie_id = random.choice(ratings['movieId'].unique())
+    #     frame = ratings.filter_by(movie_id,'movieId')
+    #     if frame.num_rows()>=5
+    #         matrix.append(test)
+
     return matrix
 
 def average(matrix):
