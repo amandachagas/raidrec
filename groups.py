@@ -30,7 +30,9 @@ def multiplicative(matrix):
 def average_without_misery(matrix):
     arr = []
     for row in matrix:
-        arr.append( sum(row)/float(len(row)) )
+        wm = row[:]
+        wm.remove(min(wm))
+        arr.append( sum(wm)/float(len(wm)) )
     return arr
 
 def test_strategies(matrix):
