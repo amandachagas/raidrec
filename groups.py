@@ -27,15 +27,17 @@ def multiplicative(matrix):
         arr.append( float(reduce(lambda x,y: x*y, row)) )
     return arr
 
-def average_without_misery(matrix):
+def average_without_misery(matrix, threshold):
     arr = []
     for row in matrix:
-        wm = row[:]
-        wm.remove(min(wm))
-        arr.append( sum(wm)/float(len(wm)) )
+        wm = [n for n in row if n >= threshold]
+        if(wm):
+            arr.append( sum(wm)/float(len(wm)) )
+        else:
+            arr.append(0.0)
     return arr
 
-def test_strategies(matrix):
+def test_strategies(matrix, awm_threshold):
     print '<--Average-->'
     print average(matrix)
     print '<--Least Misery-->'
@@ -45,7 +47,7 @@ def test_strategies(matrix):
     print '<--Multiplicative-->'
     print multiplicative(matrix)
     print '<--Average Without Misery-->'
-    print average_without_misery(matrix)
+    print average_without_misery(matrix, awm_threshold)
 
 
 matrix = [
@@ -53,4 +55,4 @@ matrix = [
         [2,3,4],
         [4,5,6,7]
     ]
-test_strategies(matrix)
+test_strategies(matrix , 3.0)
