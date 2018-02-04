@@ -10,7 +10,7 @@ items.save('data/items_data_saved.csv', format='csv')
 ratings = gl.SFrame.read_csv('data/ratings.csv')
 # ratings.save('data/ratings_data')
 
-print "===== ITENS ====="
+print "===== ITENS_INITIAL ====="
 print items
 print "----- RATINGS -----"
 print ratings
@@ -21,11 +21,10 @@ items['genres'] = items['genres'].apply(lambda x: x.split('|'))
 
 # items.save('data/items_data')
 
-print "[][[][][][]"
+print "===== ITENS_CLEANNED ====="
 print items
 
 print "@ @ @ @ @ @"
-
 print ratings['movieId'].unique().size()
 
 # ratings.show()
@@ -66,20 +65,20 @@ recent_data['movieId'] = [595, 597, 12]   # Indiana Jones and the Last Crusade
 recent_data['rating'] = [3.0, 4.0, 4.5]
 recent_data['userId'] = 99999
 
-print "VAI FILHA A A A A A A A A AO"
+print " = = = = = RECS For userId 99999 - BASED ON ITEM_SIMILARITY = = = = = = "
 print model.recommend(users=[99999], new_observation_data=recent_data).join(items, on='movieId').sort('rank')
 
 print " = = = = = = = = = = = = = = = = = = = = = = "
 print "          - MODEL BASED ON CONTENT -         "
 print " = = = = = = = = = = = = = = = = = = = = = = "
-print items[items['movieId'] == 595]
-print items[items['movieId'] == 597]
-print items[items['movieId'] == 12]
+# print items[items['movieId'] == 595]
+# print items[items['movieId'] == 597]
+# print items[items['movieId'] == 12]
 
-# # model_content = gl.recommender.item_content_recommender.get_default_options()
-# model_content = gl.recommender.item_content_recommender.create(items, 'movieId', ratings, 'userId')
-# print "   #&@!# @&# @#* @ #*@#( *@( #@( #(# (@"
-# print model_content.recommend(users=[99999], new_observation_data=recent_data).join(items, on='movieId').sort('rank')
+# model_content = gl.recommender.item_content_recommender.get_default_options()
+model_content = gl.recommender.item_content_recommender.create(items, 'movieId', ratings, 'userId')
+print " = = = = = RECS For userId 99999 - BASED ON ITEM CONTENT = = = = = = "
+print model_content.recommend(users=[99999], new_observation_data=recent_data).join(items, on='movieId').sort('rank')
 
 # print model_content.recommend_from_interactions([0])
 
@@ -88,57 +87,6 @@ print items[items['movieId'] == 12]
 print " = = = = = Initializing Group = = = = = "
 matrix = g.group_by_rated_movies(5, ratings,gl.aggregate)
 print matrix
-
-print " = = Avaliacoes filmes = = "
-av_titanic = ratings[ratings['movieId'] == 1721]
-print "Tamanho Titanic:"
-print len(av_titanic)
-print av_titanic.print_rows(num_rows=164)
-print av_titanic[av_titanic['userId'] == 125]
-av_braveheart = ratings[ratings['movieId'] == 110]
-print "Tamanho Braveheart:"
-print len(av_braveheart)
-av_jurassic_park = ratings[ratings['movieId'] == 480]
-print "Tamanho Jurassic Park:"
-print len(av_jurassic_park)
-av_lion_king = ratings[ratings['movieId'] == 364]
-print "Tamanho Lion King:"
-print len(av_lion_king)
-av_star_wars_4 = ratings[ratings['movieId'] == 260]
-print "Tamanho Star Wars 4:"
-print len(av_star_wars_4)
-# print av_titanic
-
-count_2 = 0
-count_3 = 0
-count_4 = 0
-count_5 =0
-users_rated_5_movies = []
-
-for titanic_obj in av_titanic:
-	aux_dict = dict()
-	for braveheart_obj in av_braveheart:
-		if titanic_obj['userId'] == braveheart_obj['userId']:
-			count_2+=1
-			for jurassic_park_obj in av_jurassic_park:
-				if titanic_obj['userId'] == jurassic_park_obj['userId']:
-					count_3+=1
-					for lion_king_obj in av_lion_king:
-						if titanic_obj['userId'] == lion_king_obj['userId']:
-							count_4+=1
-							for star_wars_4_obj in av_star_wars_4:
-								if titanic_obj['userId'] == star_wars_4_obj['userId']:
-									count_5+=1
-									aux_dict['userId'] = star_wars_4_obj['userId']
-									users_rated_5_movies.append(aux_dict)
-print count_2
-print count_3
-print count_4
-print count_5
-print users_rated_5_movies
-# users_rated_5_movies.export_json('data/users_rated_5_movies.json', orient='records')
-with open('users_rated_5_movies.json', 'w') as outfile:  
-    json.dump(users_rated_5_movies, outfile)
 
 
 ### Use the following lines to fast load your data in SFrame format
