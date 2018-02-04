@@ -97,13 +97,31 @@ print data
 #fixed group
 fixed_group = user_list[:5]
 print fixed_group
+fixed_rates_m = []
 
 #random group
 random_group = random.sample(user_list,5)
 print random_group
+random_rates_m = []
+
+movie_list = [1721, 110, 480, 364, 260]
+for m in movie_list:
+	m_frame = ratings.filter_by(m,'movieId')
+	fixed_rates = []
+	for u in fixed_group:
+		fixed_rates.append(m_frame.filter_by(u,'userId')['rating'][0])
+	fixed_rates_m.append(fixed_rates)
+
+	random_rates = []
+	for u in random_group:
+		random_rates.append(m_frame.filter_by(u,'userId')['rating'][0])
+	random_rates_m.append(random_rates)
+
+print fixed_rates_m
+print random_rates_m
 
 movie_group = gl.SFrame()
-movie_group['movieId'] = [1721, 110, 480, 364, 260]
+movie_group['movieId'] = movie_list
 movie_group['userId'] = 98765
 
 ### Use the following lines to fast load your data in SFrame format
