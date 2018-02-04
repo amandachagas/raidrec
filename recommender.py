@@ -100,11 +100,11 @@ print "User ids: %s" % fixed_group
 fixed_rates_m = []
 
 #random group
-# random_group = random.sample(user_list,5)
-# print ""
-# print " = = = = RANDOM GROUP = = = = "
-# print "User ids: %s" % random_group
-# random_rates_m = []
+random_group = random.sample(user_list,5)
+print ""
+print " = = = = RANDOM GROUP = = = = "
+print "User ids: %s" % random_group
+random_rates_m = []
 
 movie_list = [1721, 110, 480, 364, 260]
 for m in movie_list:
@@ -114,37 +114,52 @@ for m in movie_list:
 		fixed_rates.append(m_frame.filter_by(u,'userId')['rating'][0])
 	fixed_rates_m.append(fixed_rates)
 
-	# random_rates = []
-	# for u in random_group:
-	# 	random_rates.append(m_frame.filter_by(u,'userId')['rating'][0])
-	# random_rates_m.append(random_rates)
+	random_rates = []
+	for u in random_group:
+		random_rates.append(m_frame.filter_by(u,'userId')['rating'][0])
+	random_rates_m.append(random_rates)
 
 print "\n...Individual rates in the fixed group..."
 i=0
+print '|               Movie Name               |     Rate by users      |'
 for aux in fixed_rates_m:
-	print "Movie ID: %s | Rate by user: %s"% (movie_list[i],aux)
+	txt = '|{message: <40}|'.format(message=items.filter_by(movie_list[i],'movieId')['title'][0])
+	for item in aux:
+		txt+= " %.1f " % item
+	txt += "|"
+	print txt
 	i+=1
 
-# print "\n...Individual rates in the random group..."
-# i=0
-# for aux in random_rates_m:
-# 	print "Movie ID: %s | Rate by user: %s"% (movie_list[i],aux)
-# 	i+=1
+print "\n...Individual rates in the random group..."
+i=0
+print '|               Movie Name               |     Rate by users      |'
+for aux in random_rates_m:
+	txt = '|{message: <40}|'.format(message=items.filter_by(movie_list[i],'movieId')['title'][0])
+	for item in aux:
+		txt+= " %.1f " % item
+	txt += "|"
+	print txt
+	i+=1
 
 fixed_strat = g.run_strategies(fixed_rates_m, 2)
 print "\n>>>>>Fixed Group Rates after strategies are applied<<<<<<"
+print "|            Strategy            |               Rates               |"
 for key,value in fixed_strat.iteritems():
-	txt = "| %s |" % key
+	txt = "| {message: <30} |".format(message=key)
 	for item in value:
-		txt+= "%.3f" % item
-	txt += " |"
+		txt+= " %.3f " % item
+	txt += "|"
 	print txt
 
-# random_strat = g.run_strategies(random_rates_m, 2)
-# print "\n>>>>>Random Group Rates after strategies are applied<<<<<<"
-# print "| Strategy name |                 Values                 |"
-# for key,value in random_strat.iteritems():
-# 	print "| %s | %s |" %(key, value)
+random_strat = g.run_strategies(random_rates_m, 2)
+print "\n>>>>>Random Group Rates after strategies are applied<<<<<<"
+print "|            Strategy            |               Rates               |"
+for key,value in random_strat.iteritems():
+	txt = "| {message: <30} |".format(message=key)
+	for item in value:
+		txt+= " %.3f " % item
+	txt += "|"
+	print txt
 
 movie_group = gl.SFrame()
 movie_group['movieId'] = movie_list
