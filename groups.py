@@ -85,6 +85,15 @@ def test_strategies(matrix, awm_threshold):
     print '<--Average Without Misery-->'
     print average_without_misery(matrix, awm_threshold)
 
+def run_strategies(matrix, awm_threshold):
+    strat = {}
+    strat["average"] = average(matrix)
+    strat["least_misery"] = least_misery(matrix)
+    strat["most_pleasure"] = most_pleasure(matrix)
+    strat["multiplicative"] = multiplicative(matrix)
+    strat["average_without_misery"] = average_without_misery(matrix, awm_threshold)
+    return strat
+
 def test_file():
     matrix = [
             [1,2,3],

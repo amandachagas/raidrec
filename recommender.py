@@ -120,9 +120,30 @@ for m in movie_list:
 print fixed_rates_m
 print random_rates_m
 
+fixed_strat = g.run_strategies(fixed_rates_m, 2)
+print fixed_strat
+random_strat = g.run_strategies(random_rates_m, 2)
+print random_strat
+
 movie_group = gl.SFrame()
 movie_group['movieId'] = movie_list
 movie_group['userId'] = 98765
+
+for key, value in fixed_strat.iteritems():
+	print '<---------------------------------------------------------------------------->'
+	print '<---- Recommending based on the "%s" with the fixed groups ---->'% key
+	print '<---------------------------------------------------------------------------->'
+	movie_group['rating'] = value
+	print movie_group['rating']
+	print model_content.recommend(users=[98765], new_observation_data=movie_group).join(items, on='movieId').sort('rank')
+
+for key, value in random_strat.iteritems():
+	print '<---------------------------------------------------------------------------->'
+	print '<---- Recommending based on the "%s" with the random groups ---->'% key
+	print '<---------------------------------------------------------------------------->'
+	movie_group['rating'] = value
+	print movie_group['rating']
+	print model_content.recommend(users=[98765], new_observation_data=movie_group).join(items, on='movieId').sort('rank')
 
 ### Use the following lines to fast load your data in SFrame format
 # same_items_data = gl.load_sframe('data/items_data')
