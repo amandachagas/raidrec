@@ -29,37 +29,38 @@ print "@ @ @ @ @ @"
 print ratings['movieId'].unique().size()
 
 # ratings.show()
-
+print " = = = = = = = = = = = = = = = = = = = = = = "
+print "          - MODEL BASED ON ITEM_SIMILARITY -         "
+print " = = = = = = = = = = = = = = = = = = = = = = "
 training_data, validation_data = gl.recommender.util.random_split_by_user(ratings, 'userId', 'movieId')
 model = gl.recommender.create(training_data, 'userId', 'movieId')
 
 # print model
 
-print "U U U U U U U U U U U u"
-print items[items['movieId'] == 12]
+# print "U U U U U U U U U U U u"
+# print items[items['movieId'] == 12]
 
 print "There can be more Itens than Rated Itens..."
 print ratings['movieId'].unique().size()
 print items['movieId'].unique().size()
 
-print "/ / / / / / / / /"
-print model.get_similar_items([12], k=5)
+# print "/ / / / / / / / /"
+# print model.get_similar_items([12], k=5)
 
-print "\ \ \ \ \ \ \ \ \\"
-print model.get_similar_items([12]).join(items, on={'similar': 'movieId'}).sort('rank')
+# print "\ \ \ \ \ \ \ \ \\"
+# print model.get_similar_items([12]).join(items, on={'similar': 'movieId'}).sort('rank')
 
 
 # You can now make recommendations for all the users you've just trained on
-results = model.recommend(users=[2])
+# results = model.recommend(users=[2])
+# print "@-@-@-@-@-@"
+# print results
 
-print "@-@-@-@-@-@"
-print results
+# print " - - - - Big Merge - - - -"
+# print ratings[ratings['userId'] == 2].join(items, on='movieId')
 
-print " - - - - Big Merge - - - -"
-print ratings[ratings['userId'] == 2].join(items, on='movieId')
-
-print "= = = = Recommendations to userId 2 merging item and rating tables = = = ="
-print model.recommend(users=[2], k=20).join(items, on='movieId').sort('rank')
+# print "= = = = Recommendations to userId 2 merging item and rating tables = = = ="
+# print model.recommend(users=[2], k=20).join(items, on='movieId').sort('rank')
 
 recent_data = gl.SFrame()
 recent_data['movieId'] = [595, 597, 12]   # Indiana Jones and the Last Crusade
@@ -90,17 +91,18 @@ print " = = = = = Initializing Group = = = = = "
 # print matrix
 user_file = gl.SFrame.read_json('data/users_rated_5_movies.json')
 user_list = list(user_file['userId'])
-data = ratings.filter_by(user_list,'userId')
-print data
-
 
 #fixed group
 fixed_group = user_list[:5]
+print ""
+print " = = = = FIXED GROUP = = = = "
 print fixed_group
 fixed_rates_m = []
 
 #random group
 random_group = random.sample(user_list,5)
+print ""
+print " = = = = RANDOM GROUP = = = = "
 print random_group
 random_rates_m = []
 
@@ -112,18 +114,20 @@ for m in movie_list:
 		fixed_rates.append(m_frame.filter_by(u,'userId')['rating'][0])
 	fixed_rates_m.append(fixed_rates)
 
-	random_rates = []
-	for u in random_group:
-		random_rates.append(m_frame.filter_by(u,'userId')['rating'][0])
-	random_rates_m.append(random_rates)
+	# random_rates = []
+	# for u in random_group:
+	# 	random_rates.append(m_frame.filter_by(u,'userId')['rating'][0])
+	# random_rates_m.append(random_rates)
 
+print ""
 print fixed_rates_m
-print random_rates_m
+# print random_rates_m
 
 fixed_strat = g.run_strategies(fixed_rates_m, 2)
+print ""
 print fixed_strat
-random_strat = g.run_strategies(random_rates_m, 2)
-print random_strat
+# random_strat = g.run_strategies(random_rates_m, 2)
+# print random_strat
 
 movie_group = gl.SFrame()
 movie_group['movieId'] = movie_list
@@ -145,7 +149,7 @@ for key, value in fixed_strat.iteritems():
 # 	print movie_group['rating']
 # 	print model_content.recommend(users=[98765], new_observation_data=movie_group).join(items, on='movieId').sort('rank')
 
-### Use the following lines to fast load your data in SFrame format
+# ## Use the following lines to fast load your data in SFrame format
 # same_items_data = gl.load_sframe('data/items_data')
 # same_ratings_data = gl.load_sframe('data/ratings_data')
 
