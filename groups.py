@@ -1,16 +1,40 @@
-import random
 #groups users based on the amount k of the same rated movies
 def group_by_rated_movies(rating_count, ratings, agg):
     print "<-- Aggregating-->"
     matrix = []
     movie_id_count = ratings.groupby(key_columns='movieId',operations={'count':agg.COUNT()}).sort('count',ascending=False)
-    #movie_rated_times = movie_id_count['count'].filter(lambda x: x>rating_count)
+    movie_rated_times = movie_id_count['count'].filter(lambda x: x>rating_count)
 
-    # while len(matrix) < k:
-    #     movie_id = random.choice(ratings['movieId'].unique())
+    k=5
+    i=0
+    # l1 = list(ratings.filter_by(movie_id_count[0]['movieId'],'movieId')['userId'])
+    # l2 = list(ratings.filter_by(movie_id_count[1]['movieId'],'movieId')['userId'])
+    # inter = list(set(l1).intersection(l2))
+    # print inter
+    # print len(inter)
+
+    movie_id = movie_id_count[0]['movieId']
+    frame = ratings.filter_by(movie_id,'movieId')
+    l = list(frame['userId'])
+
+    similar = []
+    while i<len(movie_rated_times):        
+        movie_id = movie_id_count[i]['movieId']
+        frame = ratings.filter_by(movie_id,'movieId')
+        if len(list(set(l).intersection(list(frame['userId']))))>k:
+            similar.append(movie_id)
+        i+=1
+    print similar
+
+    # while len(matrix) < k and i<len(movie_rated_times):
+    #     movie_id = movie_id_count[i]['movieId']
     #     frame = ratings.filter_by(movie_id,'movieId')
-    #     if frame.num_rows()>=5
-    #         matrix.append(test)
+    #     l = list(frame['userId'])
+
+    #     print l
+    #     matrix.append(frame)
+    #     i+=1
+
 
     return matrix
 
