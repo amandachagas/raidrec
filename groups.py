@@ -29,7 +29,7 @@ def average_without_misery(matrix, threshold):
         if(wm):
             arr.append( sum(wm)/float(len(wm)) )
         else:
-            arr.append(0.0)
+            arr.append(1.0)
     return arr
 
 def run_strategies(matrix, awm_threshold):

@@ -96,15 +96,15 @@ user_list = list(user_file['userId'])
 fixed_group = user_list[:5]
 print ""
 print " = = = = FIXED GROUP = = = = "
-print fixed_group
+print "User ids: %s" % fixed_group
 fixed_rates_m = []
 
 #random group
-random_group = random.sample(user_list,5)
-print ""
-print " = = = = RANDOM GROUP = = = = "
-print random_group
-random_rates_m = []
+# random_group = random.sample(user_list,5)
+# print ""
+# print " = = = = RANDOM GROUP = = = = "
+# print "User ids: %s" % random_group
+# random_rates_m = []
 
 movie_list = [1721, 110, 480, 364, 260]
 for m in movie_list:
@@ -119,20 +119,37 @@ for m in movie_list:
 	# 	random_rates.append(m_frame.filter_by(u,'userId')['rating'][0])
 	# random_rates_m.append(random_rates)
 
-print ""
-print fixed_rates_m
-# print random_rates_m
+print "\n...Individual rates in the fixed group..."
+i=0
+for aux in fixed_rates_m:
+	print "Movie ID: %s | Rate by user: %s"% (movie_list[i],aux)
+	i+=1
+
+# print "\n...Individual rates in the random group..."
+# i=0
+# for aux in random_rates_m:
+# 	print "Movie ID: %s | Rate by user: %s"% (movie_list[i],aux)
+# 	i+=1
 
 fixed_strat = g.run_strategies(fixed_rates_m, 2)
-print ""
-print fixed_strat
+print "\n>>>>>Fixed Group Rates after strategies are applied<<<<<<"
+for key,value in fixed_strat.iteritems():
+	txt = "| %s |" % key
+	for item in value:
+		txt+= "%.3f" % item
+	txt += " |"
+	print txt
+
 # random_strat = g.run_strategies(random_rates_m, 2)
-# print random_strat
+# print "\n>>>>>Random Group Rates after strategies are applied<<<<<<"
+# print "| Strategy name |                 Values                 |"
+# for key,value in random_strat.iteritems():
+# 	print "| %s | %s |" %(key, value)
 
 movie_group = gl.SFrame()
 movie_group['movieId'] = movie_list
 movie_group['userId'] = 98765
-
+print ""
 for key, value in fixed_strat.iteritems():
 	print '<---------------------------------------------------------------------------->'
 	print '<---- Recommending based on the "%s" with the fixed groups ---->'% key
