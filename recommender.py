@@ -77,7 +77,7 @@ print " = = = = = = = = = = = = = = = = = = = = = = "
 # print items[items['movieId'] == 12]
 
 # model_content = gl.recommender.item_content_recommender.get_default_options()
-model_content = gl.recommender.item_content_recommender.create(items, 'movieId', ratings, 'userId')
+model_content = gl.recommender.item_content_recommender.create(items, 'movieId', ratings, 'userId', 'rating')
 print " = = = = = RECS For userId 99999 - BASED ON ITEM CONTENT = = = = = = "
 print model_content.recommend(users=[99999], new_observation_data=recent_data).join(items, on='movieId').sort('rank')
 
@@ -137,13 +137,13 @@ for key, value in fixed_strat.iteritems():
 	print movie_group['rating']
 	print model_content.recommend(users=[98765], new_observation_data=movie_group).join(items, on='movieId').sort('rank')
 
-for key, value in random_strat.iteritems():
-	print '<---------------------------------------------------------------------------->'
-	print '<---- Recommending based on the "%s" with the random groups ---->'% key
-	print '<---------------------------------------------------------------------------->'
-	movie_group['rating'] = value
-	print movie_group['rating']
-	print model_content.recommend(users=[98765], new_observation_data=movie_group).join(items, on='movieId').sort('rank')
+# for key, value in random_strat.iteritems():
+# 	print '<---------------------------------------------------------------------------->'
+# 	print '<---- Recommending based on the "%s" with the random groups ---->'% key
+# 	print '<---------------------------------------------------------------------------->'
+# 	movie_group['rating'] = value
+# 	print movie_group['rating']
+# 	print model_content.recommend(users=[98765], new_observation_data=movie_group).join(items, on='movieId').sort('rank')
 
 ### Use the following lines to fast load your data in SFrame format
 # same_items_data = gl.load_sframe('data/items_data')
