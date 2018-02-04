@@ -1,4 +1,6 @@
 import graphlab as gl
+import groups as g
+import json
 
 # gl.canvas.set_target("ipynb")
 
@@ -8,7 +10,7 @@ items.save('data/items_data_saved.csv', format='csv')
 ratings = gl.SFrame.read_csv('data/ratings.csv')
 # ratings.save('data/ratings_data')
 
-print "===== ITENS ====="
+print "===== ITENS_INITIAL ====="
 print items
 print "----- RATINGS -----"
 print ratings
@@ -19,11 +21,10 @@ items['genres'] = items['genres'].apply(lambda x: x.split('|'))
 
 # items.save('data/items_data')
 
-print "[][[][][][]"
+print "===== ITENS_CLEANNED ====="
 print items
 
 print "@ @ @ @ @ @"
-
 print ratings['movieId'].unique().size()
 
 # ratings.show()
@@ -64,28 +65,29 @@ recent_data['movieId'] = [595, 597, 12]   # Indiana Jones and the Last Crusade
 recent_data['rating'] = [3.0, 4.0, 4.5]
 recent_data['userId'] = 99999
 
-print "VAI FILHA A A A A A A A A AO"
+print " = = = = = RECS For userId 99999 - BASED ON ITEM_SIMILARITY = = = = = = "
 print model.recommend(users=[99999], new_observation_data=recent_data).join(items, on='movieId').sort('rank')
 
 print " = = = = = = = = = = = = = = = = = = = = = = "
 print "          - MODEL BASED ON CONTENT -         "
 print " = = = = = = = = = = = = = = = = = = = = = = "
-print items[items['movieId'] == 595]
-print items[items['movieId'] == 597]
-print items[items['movieId'] == 12]
+# print items[items['movieId'] == 595]
+# print items[items['movieId'] == 597]
+# print items[items['movieId'] == 12]
 
 # model_content = gl.recommender.item_content_recommender.get_default_options()
 model_content = gl.recommender.item_content_recommender.create(items, 'movieId', ratings, 'userId')
-print "   #&@!# @&# @#* @ #*@#( *@( #@( #(# (@"
+print " = = = = = RECS For userId 99999 - BASED ON ITEM CONTENT = = = = = = "
 print model_content.recommend(users=[99999], new_observation_data=recent_data).join(items, on='movieId').sort('rank')
 
 # print model_content.recommend_from_interactions([0])
 
 #>>>use this to export SFrame into json
 #ratings.export_json('data/ratings.json', orient='records')
-import groups as g
+print " = = = = = Initializing Group = = = = = "
 matrix = g.group_by_rated_movies(5, ratings,gl.aggregate)
 print matrix
+
 
 ### Use the following lines to fast load your data in SFrame format
 # same_items_data = gl.load_sframe('data/items_data')
