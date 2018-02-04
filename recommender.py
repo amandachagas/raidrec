@@ -1,6 +1,7 @@
 import graphlab as gl
 import groups as g
 import json
+import random
 
 # gl.canvas.set_target("ipynb")
 
@@ -85,9 +86,25 @@ print model_content.recommend(users=[99999], new_observation_data=recent_data).j
 #>>>use this to export SFrame into json
 #ratings.export_json('data/ratings.json', orient='records')
 print " = = = = = Initializing Group = = = = = "
-matrix = g.group_by_rated_movies(5, ratings,gl.aggregate)
-print matrix
+# matrix = g.group_by_rated_movies(5, ratings,gl.aggregate)
+# print matrix
+user_file = gl.SFrame.read_json('data/users_rated_5_movies.json')
+user_list = list(user_file['userId'])
+data = ratings.filter_by(user_list,'userId')
+print data
 
+
+#fixed group
+fixed_group = user_list[:5]
+print fixed_group
+
+#random group
+random_group = random.sample(user_list,5)
+print random_group
+
+movie_group = gl.SFrame()
+movie_group['movieId'] = [1721, 110, 480, 364, 260]
+movie_group['userId'] = 98765
 
 ### Use the following lines to fast load your data in SFrame format
 # same_items_data = gl.load_sframe('data/items_data')

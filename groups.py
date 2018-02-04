@@ -1,3 +1,4 @@
+import random
 #groups users based on the amount k of the same rated movies
 def group_by_rated_movies(rating_count, ratings, agg):
     print "<-- Aggregating-->"
@@ -84,10 +85,10 @@ def test_strategies(matrix, awm_threshold):
     print '<--Average Without Misery-->'
     print average_without_misery(matrix, awm_threshold)
 
-
-matrix = [
-        [1,2,3],
-        [2,3,4],
-        [4,5,6,7]
-    ]
-test_strategies(matrix , 3.0)
+def test_file():
+    matrix = [
+            [1,2,3],
+            [2,3,4],
+            [4,5,6,7]
+        ]
+    test_strategies(matrix , 3.0)
