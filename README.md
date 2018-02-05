@@ -37,3 +37,11 @@ pip install "ipython[notebook]"
 # Install your licensed copy of GraphLab Create
 pip install --upgrade --no-cache-dir https://get.graphlab.com/GraphLab-Create/2.1/(YOUR_EMAIL)/(YOUR_LICENSE)/GraphLab-Create-License.tar.gz
 ```
+
+#### Step 5: Run the script
+
+Once you have the GraphLab Create installed on your virtual environment, run the main script by this command:
+
+```
+python recommender.py 
+```
