@@ -78,6 +78,7 @@ print " = = = = = = = = = = = = = = = = = = = = = = "
 # print items[items['movieId'] == 12]
 
 # model_content = gl.recommender.item_content_recommender.get_default_options()
+train_content, test_content = gl.recommender.util.random_split_by_user(ratings, 'userId', 'movieId')
 model_content = gl.recommender.item_content_recommender.create(items, 'movieId', ratings, 'userId', 'rating')
 print " = = = = = RECS For userId 99999 - BASED ON ITEM CONTENT = = = = = = "
 print model_content.recommend(users=[99999], new_observation_data=recent_data).join(items, on='movieId').sort('rank')
@@ -172,6 +173,18 @@ for key, value in fixed_strat.iteritems():
 	movie_group['rating'] = value
 	print movie_group['rating']
 	print model_content.recommend(users=[98765], new_observation_data=movie_group).join(items, on='movieId').sort('rank')
+
+
+print " - / - / - / - / - / - / - / - "
+
+newItems=items.copy()
+
+contentTrain = gl.item_content_recommender.create(newItems, 'movieId', train_content, 'userId', target='rating')
+evalPrecisionRecall = contentTrain.evaluate_precision_recall(test_content)
+evalRMSE = contentTrain.evaluate_rmse(test_content, target='rating')
+eval = contentTrain.evaluate(test_content)
+print(eval)
+
 
 # for key, value in random_strat.iteritems():
 # 	print '<---------------------------------------------------------------------------->'
