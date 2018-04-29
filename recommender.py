@@ -35,6 +35,12 @@ print " = = = = = = = = = = = = = = = = = = = = = = "
 training_data, validation_data = gl.recommender.util.random_split_by_user(ratings, 'userId', 'movieId')
 model = gl.recommender.create(training_data, 'userId', 'movieId')
 
+print " = = = = = = = EVALUATING ITEM_SIMILARITY MODEL = = = = = = = ="
+evalPrecisionRecall = model.evaluate_precision_recall(validation_data)
+evalRMSE = model.evaluate_rmse(validation_data, target='rating')
+eval = model.evaluate(validation_data)
+print(eval)
+
 # print model
 
 # print "U U U U U U U U U U U u"
@@ -184,6 +190,13 @@ evalPrecisionRecall = contentTrain.evaluate_precision_recall(test_content)
 evalRMSE = contentTrain.evaluate_rmse(test_content, target='rating')
 eval = contentTrain.evaluate(test_content)
 print(eval)
+
+
+# print "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+
+# print newItems['year'].sketch_summary()
+# print newItems['genres'].sketch_summary()
+# print newItems['title'].sketch_summary()
 
 
 # for key, value in random_strat.iteritems():
