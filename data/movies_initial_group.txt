@@ -5,3 +5,4 @@
 480,Jurassic Park (1993),Action|Adventure|Sci-Fi|Thriller
 364,"Lion King, The (1994)",Adventure|Animation|Children|Drama|Musical|IMAX
 260,Star Wars: Episode IV - A New Hope (1977),Action|Adventure|Sci-Fi
+71379,Paranormal Activity (2009),Horror|Thriller

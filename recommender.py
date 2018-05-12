@@ -20,6 +20,10 @@ items['year'] = items['title'].apply(lambda x: x[-5:-1])
 items['title'] = items['title'].apply(lambda x: x[:-7])
 items['genres'] = items['genres'].apply(lambda x: x.split('|'))
 
+items.remove_column('year')
+
+print ">>>>>>>>>>>>>>>> NEW ITEEEEEEEMS"
+print items
 # items.save('data/items_data')
 
 print "===== ITENS_CLEANNED ====="
@@ -113,7 +117,7 @@ print " = = = = RANDOM GROUP = = = = "
 print "User ids: %s" % random_group
 random_rates_m = []
 
-movie_list = [1721, 110, 480, 364, 260]
+movie_list = [1721, 110, 364, 260, 71379]
 for m in movie_list:
 	m_frame = ratings.filter_by(m,'movieId')
 	fixed_rates = []
