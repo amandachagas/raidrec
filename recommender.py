@@ -89,7 +89,7 @@ print " = = = = = = = = = = = = = = = = = = = = = = "
 
 # model_content = gl.recommender.item_content_recommender.get_default_options()
 train_content, test_content = gl.recommender.util.random_split_by_user(ratings, 'userId', 'movieId')
-model_content = gl.recommender.item_content_recommender.create(items, 'movieId', ratings, 'userId', 'rating')
+model_content = gl.recommender.item_content_recommender.create(items, 'movieId', ratings, 'userId', 'rating',similarity_metrics='pearson')
 print " = = = = = RECS For userId 99999 - BASED ON ITEM CONTENT = = = = = = "
 print model_content.recommend(users=[99999], new_observation_data=recent_data).join(items, on='movieId').sort('rank')
 
