@@ -38,6 +38,12 @@ pip install "ipython[notebook]"
 pip install --upgrade --no-cache-dir https://get.graphlab.com/GraphLab-Create/2.1/(YOUR_EMAIL)/(YOUR_LICENSE)/GraphLab-Create-License.tar.gz
 ```
 
+#### Step 5: Install SciPy, NumPy and Scikit-learn
+
+```
+python -m pip install numpy scipy scikit-learn
+```
+
 #### Step 5: Run the script
 
 Once you have the GraphLab Create installed on your virtual environment, run the main script by this command:
