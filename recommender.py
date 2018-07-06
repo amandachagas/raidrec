@@ -2,6 +2,7 @@ import graphlab as gl
 import groups as g
 import json
 import random
+from sklearn.metrics import precision_score, average_precision_score
 
 # gl.canvas.set_target("ipynb")
 
@@ -228,14 +229,14 @@ print movies_recs_average
 
 count = 0
 acc = 0
-result_average = []
+result_mean_average = []
 
 for recs_item in movies_recs_average:
 	for rating_item in ratings:
 		if( recs_item ==  rating_item['movieId']):
 			count += 1
 			acc += rating_item['rating']
-	result_average.append(round(acc/count, 2))
+	result_mean_average.append(round(acc/count, 2))
 
 # print " > > > > > > > > COUNT"
 # print count
@@ -243,8 +244,8 @@ for recs_item in movies_recs_average:
 # print " > > > > > > > > ACC"
 # print acc
 
-print " > > > > > > > >  > >> >  > RESULT"
-print result_average
+print " > > > > > > > >  > >> >  > RESULT result_mean_average"
+print result_mean_average
 
 
 
@@ -253,14 +254,14 @@ print movies_recs_multiplicative
 
 count = 0
 acc = 0
-result_multiplicative = []
+result_mean_multiplicative = []
 
 for recs_item in movies_recs_multiplicative:
 	for rating_item in ratings:
 		if( recs_item ==  rating_item['movieId']):
 			count += 1
 			acc += rating_item['rating']
-	result_multiplicative.append(round(acc/count, 2))
+	result_mean_multiplicative.append(round(acc/count, 2))
 
 # print " > > > > > > > > COUNT"
 # print count
@@ -268,21 +269,47 @@ for recs_item in movies_recs_multiplicative:
 # print " > > > > > > > > ACC"
 # print acc
 
-print " > > > > > > > >  > >> >  > RESULT"
-print result_multiplicative
+print " > > > > > > > >  > >> >  > RESULT result_mean_multiplicative"
+print result_mean_multiplicative
 
 
-to_predict = gl.SFrame({'movieId': [4], 'title': ['D'], 'genres': [['Comedy','Terror']]})
+binary_mean_average = []
+for item in result_mean_average:
+	if item > 3.5:
+		binary_mean_average.append(10)
+	else:
+		binary_mean_average.append(0)
 
-for recs_item in movies_recs_multiplicative:
-	to_predict = to_predict.append(items[items['movieId'] == recs_item])
-	print "Entrou aqui?"
+print "Binary Average: "
+print binary_mean_average
 
-print "U U U U U U U U U U U u"
-# print items[items['movieId'] == 480]
-to_predict = to_predict[1:]
-print to_predict
 
+average_scores = recs_average['score']
+
+print "Scores Average: "
+print average_scores
+
+mapped_average_scrore = map(lambda x : int(x*10), average_scores)
+
+print "Scores Average MApped: "
+print mapped_average_scrore
+
+my_precision = precision_score(binary_mean_average, mapped_average_scrore, average='micro')
+
+print "My precision"
+print my_precision
+
+
+# to_predict = gl.SFrame({'movieId': [4], 'title': ['D'], 'genres': [['Comedy','Terror']]})
+
+# for recs_item in movies_recs_multiplicative:
+# 	to_predict = to_predict.append(items[items['movieId'] == recs_item])
+# 	print "Entrou aqui?"
+
+# print "U U U U U U U U U U U u"
+# # print items[items['movieId'] == 480]
+# to_predict = to_predict[1:]
+# print to_predict
 
 
 
