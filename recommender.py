@@ -2,6 +2,7 @@ import graphlab as gl
 import groups as g
 import json
 import random
+import evaluate as evaluate
 from sklearn.metrics import precision_score, average_precision_score
 
 # gl.canvas.set_target("ipynb")
@@ -224,44 +225,56 @@ movie_group['rating'] = group_average_without_misery
 recs_average_without_misery = model_content.recommend(users=[98765], new_observation_data=movie_group).join(items, on='movieId').sort('rank')
 
 
-movies_recs_average = recs_average['movieId']
-print movies_recs_average
-
-count = 0
-acc = 0
-result_mean_average = []
-
-for recs_item in movies_recs_average:
-	for rating_item in ratings:
-		if( recs_item ==  rating_item['movieId']):
-			count += 1
-			acc += rating_item['rating']
-	result_mean_average.append(round(acc/count, 2))
-
-# print " > > > > > > > > COUNT"
-# print count
-
-# print " > > > > > > > > ACC"
-# print acc
-
-print " > > > > > > > >  > >> >  > RESULT result_mean_average"
+print "General mean AVERAGE"
+result_mean_average = evaluate.get_database_mean(recs_average['movieId'], ratings)
 print result_mean_average
 
+print "General mean LEAST MISERY"
+result_mean_least_misery = evaluate.get_database_mean(recs_least_misery['movieId'], ratings)
+print result_mean_least_misery
+
+print "General mean MOST PLEASURE"
+result_mean_most_pleasure = evaluate.get_database_mean(recs_most_pleasure['movieId'], ratings)
+print result_mean_most_pleasure
+
+print "General mean MULTIPLICATIVE"
+result_mean_multiplicative = evaluate.get_database_mean(recs_multiplicative['movieId'], ratings)
+print result_mean_multiplicative
+
+print "General mean AVERAGE WITHOUT MISERY"
+result_mean_average_without_misery = evaluate.get_database_mean(recs_average_without_misery['movieId'], ratings)
+print result_mean_average_without_misery
 
 
-movies_recs_multiplicative = recs_multiplicative['movieId']
-print movies_recs_multiplicative
+print "> > precision AVE"
+print evaluate.binary_precision(result_mean_average, 3.9)
 
-count = 0
-acc = 0
-result_mean_multiplicative = []
+print "> > precision LEAST"
+print evaluate.binary_precision(result_mean_least_misery, 3.9)
 
-for recs_item in movies_recs_multiplicative:
-	for rating_item in ratings:
-		if( recs_item ==  rating_item['movieId']):
-			count += 1
-			acc += rating_item['rating']
-	result_mean_multiplicative.append(round(acc/count, 2))
+print "> > precision MOST"
+print evaluate.binary_precision(result_mean_most_pleasure, 3.9)
+
+print "> > precision MULTIPLICATIVE"
+print evaluate.binary_precision(result_mean_multiplicative, 3.9)
+
+print "> > precision WITHOUT"
+print evaluate.binary_precision(result_mean_average_without_misery, 3.9)
+
+
+# movies_recs_average = recs_average['movieId']
+# print movies_recs_average
+
+# count = 0
+# acc = 0
+# result_mean_average = []
+
+# for recs_item in movies_recs_average:
+# 	for rating_item in ratings:
+# 		if( recs_item ==  rating_item['movieId']):
+# 			count += 1
+# 			acc += rating_item['rating']
+# 	result_mean_average.append(round(acc/count, 2))
 
 # print " > > > > > > > > COUNT"
 # print count
@@ -269,35 +282,62 @@ for recs_item in movies_recs_multiplicative:
 # print " > > > > > > > > ACC"
 # print acc
 
-print " > > > > > > > >  > >> >  > RESULT result_mean_multiplicative"
-print result_mean_multiplicative
+# print " > > > > > > > >  > >> >  > RESULT result_mean_average"
+# print result_mean_average
 
 
-binary_mean_average = []
-for item in result_mean_average:
-	if item > 3.5:
-		binary_mean_average.append(10)
-	else:
-		binary_mean_average.append(0)
 
-print "Binary Average: "
-print binary_mean_average
+# movies_recs_multiplicative = recs_multiplicative['movieId']
+# print movies_recs_multiplicative
+
+# count = 0
+# acc = 0
+# result_mean_multiplicative = []
+
+# for recs_item in movies_recs_multiplicative:
+# 	for rating_item in ratings:
+# 		if( recs_item ==  rating_item['movieId']):
+# 			count += 1
+# 			acc += rating_item['rating']
+# 	result_mean_multiplicative.append(round(acc/count, 2))
+
+# # print " > > > > > > > > COUNT"
+# # print count
+
+# # print " > > > > > > > > ACC"
+# # print acc
+
+# print " > > > > > > > >  > >> >  > RESULT result_mean_multiplicative"
+# print result_mean_multiplicative
 
 
-average_scores = recs_average['score']
+# binary_mean_average = []
+# for item in result_mean_average:
+# 	if item > 3.5:
+# 		binary_mean_average.append(1)
+# 	else:
+# 		binary_mean_average.append(0)
 
-print "Scores Average: "
-print average_scores
+# print "Binary Average: "
+# print binary_mean_average
 
-mapped_average_scrore = map(lambda x : int(x*10), average_scores)
 
-print "Scores Average MApped: "
-print mapped_average_scrore
+# average_scores = recs_average['score']
 
-my_precision = precision_score(binary_mean_average, mapped_average_scrore, average='micro')
+# print "Scores Average: "
+# print average_scores
 
-print "My precision"
-print my_precision
+# mapped_average_scrore = map(lambda x : int(x*10), average_scores)
+
+# print "Scores Average MApped: "
+# print mapped_average_scrore
+
+# returned_movies = [1,1,1,1,1,1,1,1,1,1]
+
+# my_precision = precision_score(binary_mean_average, returned_movies)
+
+# print "My precision"
+# print my_precision
 
 
 # to_predict = gl.SFrame({'movieId': [4], 'title': ['D'], 'genres': [['Comedy','Terror']]})
