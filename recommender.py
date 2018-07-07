@@ -116,7 +116,38 @@ user_file = gl.SFrame.read_json('data/users_rated_5_movies.json')
 user_list = list(user_file['userId'])
 
 #fixed group
+
+
 fixed_group = user_list[:5]
+
+# GRUPO 02
+fixed_group = [77,596,442,243,627]
+
+# GRUPO 03
+fixed_group = [355,130,213,30,111]
+
+# GRUPO 04
+fixed_group = [627,596,388,306,311]
+
+# GRUPO 05
+fixed_group = [292,430,509,294,577]
+
+# GRUPO 06
+fixed_group = [15,355,562,243,294]
+
+# GRUPO 07
+fixed_group = [306,328,353,311,159]
+
+# GRUPO 08
+fixed_group = [73,130,577,243,328]
+
+# GRUPO 09
+fixed_group = [509,311,77,345,213]
+
+# GRUPO 10
+fixed_group = [130,355,78,430,111]
+
+
 print ""
 print " = = = = FIXED GROUP = = = = "
 print "User ids: %s" % fixed_group
@@ -138,10 +169,10 @@ for m in movie_list:
 		fixed_rates.append(m_frame.filter_by(u,'userId')['rating'][0])
 	fixed_rates_m.append(fixed_rates)
 
-	# random_rates = []
-	# for u in random_group:
-	# 	random_rates.append(m_frame.filter_by(u,'userId')['rating'][0])
-	# random_rates_m.append(random_rates)
+	random_rates = []
+	for u in random_group:
+		random_rates.append(m_frame.filter_by(u,'userId')['rating'][0])
+	random_rates_m.append(random_rates)
 
 print "\n...Individual rates in the fixed group..."
 i=0
@@ -154,16 +185,16 @@ for aux in fixed_rates_m:
 	print txt
 	i+=1
 
-# print "\n...Individual rates in the random group..."
-# i=0
-# print '|               Movie Name               |     Rate by users      |'
-# for aux in random_rates_m:
-# 	txt = '|{message: <40}|'.format(message=items.filter_by(movie_list[i],'movieId')['title'][0])
-# 	for item in aux:
-# 		txt+= " %.1f " % item
-# 	txt += "|"
-# 	print txt
-# 	i+=1
+print "\n...Individual rates in the random group..."
+i=0
+print '|               Movie Name               |     Rate by users      |'
+for aux in random_rates_m:
+	txt = '|{message: <40}|'.format(message=items.filter_by(movie_list[i],'movieId')['title'][0])
+	for item in aux:
+		txt+= " %.1f " % item
+	txt += "|"
+	print txt
+	i+=1
 
 fixed_strat = g.run_strategies(fixed_rates_m, 2)
 print "\n>>>>>Fixed Group Rates after strategies are applied<<<<<<"
@@ -175,15 +206,15 @@ for key,value in fixed_strat.iteritems():
 	txt += "|"
 	print txt
 
-# random_strat = g.run_strategies(random_rates_m, 2)
-# print "\n>>>>>Random Group Rates after strategies are applied<<<<<<"
-# print "|            Strategy            |               Rates               |"
-# for key,value in random_strat.iteritems():
-# 	txt = "| {message: <30} |".format(message=key)
-# 	for item in value:
-# 		txt+= " %.3f " % item
-# 	txt += "|"
-# 	print txt
+random_strat = g.run_strategies(random_rates_m, 2)
+print "\n>>>>>Random Group Rates after strategies are applied<<<<<<"
+print "|            Strategy            |               Rates               |"
+for key,value in random_strat.iteritems():
+	txt = "| {message: <30} |".format(message=key)
+	for item in value:
+		txt+= " %.3f " % item
+	txt += "|"
+	print txt
 
 movie_group = gl.SFrame()
 movie_group['movieId'] = movie_list
@@ -196,6 +227,14 @@ for key, value in fixed_strat.iteritems():
 	movie_group['rating'] = value
 	print movie_group['rating']
 	print model_content.recommend(users=[98765], new_observation_data=movie_group).join(items, on='movieId').sort('rank')
+
+# for key, value in random_strat.iteritems():
+# 	print '<---------------------------------------------------------------------------->'
+# 	print '<---- Recommending based on the "%s" with the random groups ---->'% key
+# 	print '<---------------------------------------------------------------------------->'
+# 	movie_group['rating'] = value
+# 	print movie_group['rating']
+# 	print model_content.recommend(users=[98765], new_observation_data=movie_group).join(items, on='movieId').sort('rank')
 
 
 print " - / - / - / - / - / - / - / - "
@@ -225,180 +264,69 @@ movie_group['rating'] = group_average_without_misery
 recs_average_without_misery = model_content.recommend(users=[98765], new_observation_data=movie_group).join(items, on='movieId').sort('rank')
 
 
+precision_at = 10
+cutoff = 3.9
+
+print "oi"
+print "User ids: %s" % fixed_group
+print "oi"
+
+
 print "General mean AVERAGE"
-result_mean_average = evaluate.get_database_mean(recs_average['movieId'], ratings)
+result_mean_average = evaluate.run_precision_at(recs_average['movieId'], ratings, precision_at, cutoff)
 print result_mean_average
 
 print "General mean LEAST MISERY"
-result_mean_least_misery = evaluate.get_database_mean(recs_least_misery['movieId'], ratings)
+result_mean_least_misery = evaluate.run_precision_at(recs_least_misery['movieId'], ratings, precision_at, cutoff)
 print result_mean_least_misery
 
 print "General mean MOST PLEASURE"
-result_mean_most_pleasure = evaluate.get_database_mean(recs_most_pleasure['movieId'], ratings)
+result_mean_most_pleasure = evaluate.run_precision_at(recs_most_pleasure['movieId'], ratings, precision_at, cutoff)
 print result_mean_most_pleasure
 
 print "General mean MULTIPLICATIVE"
-result_mean_multiplicative = evaluate.get_database_mean(recs_multiplicative['movieId'], ratings)
+result_mean_multiplicative = evaluate.run_precision_at(recs_multiplicative['movieId'], ratings, precision_at, cutoff)
 print result_mean_multiplicative
 
 print "General mean AVERAGE WITHOUT MISERY"
-result_mean_average_without_misery = evaluate.get_database_mean(recs_average_without_misery['movieId'], ratings)
+result_mean_average_without_misery = evaluate.run_precision_at(recs_average_without_misery['movieId'], ratings, precision_at, cutoff)
 print result_mean_average_without_misery
 
 
-print "> > precision AVE"
-print evaluate.binary_precision(result_mean_average, 3.9)
 
-print "> > precision LEAST"
-print evaluate.binary_precision(result_mean_least_misery, 3.9)
-
-print "> > precision MOST"
-print evaluate.binary_precision(result_mean_most_pleasure, 3.9)
-
-print "> > precision MULTIPLICATIVE"
-print evaluate.binary_precision(result_mean_multiplicative, 3.9)
-
-print "> > precision WITHOUT"
-print evaluate.binary_precision(result_mean_average_without_misery, 3.9)
-
-
-# movies_recs_average = recs_average['movieId']
-# print movies_recs_average
-
-# count = 0
-# acc = 0
-# result_mean_average = []
-
-# for recs_item in movies_recs_average:
-# 	for rating_item in ratings:
-# 		if( recs_item ==  rating_item['movieId']):
-# 			count += 1
-# 			acc += rating_item['rating']
-# 	result_mean_average.append(round(acc/count, 2))
-
-# print " > > > > > > > > COUNT"
-# print count
-
-# print " > > > > > > > > ACC"
-# print acc
-
-# print " > > > > > > > >  > >> >  > RESULT result_mean_average"
+# print "General mean AVERAGE"
+# result_mean_average = evaluate.get_database_mean(recs_average['movieId'], ratings,3)
 # print result_mean_average
 
+# print "General mean LEAST MISERY"
+# result_mean_least_misery = evaluate.get_database_mean(recs_least_misery['movieId'], ratings,4)
+# print result_mean_least_misery
 
+# print "General mean MOST PLEASURE"
+# result_mean_most_pleasure = evaluate.get_database_mean(recs_most_pleasure['movieId'], ratings,5)
+# print result_mean_most_pleasure
 
-# movies_recs_multiplicative = recs_multiplicative['movieId']
-# print movies_recs_multiplicative
-
-# count = 0
-# acc = 0
-# result_mean_multiplicative = []
-
-# for recs_item in movies_recs_multiplicative:
-# 	for rating_item in ratings:
-# 		if( recs_item ==  rating_item['movieId']):
-# 			count += 1
-# 			acc += rating_item['rating']
-# 	result_mean_multiplicative.append(round(acc/count, 2))
-
-# # print " > > > > > > > > COUNT"
-# # print count
-
-# # print " > > > > > > > > ACC"
-# # print acc
-
-# print " > > > > > > > >  > >> >  > RESULT result_mean_multiplicative"
+# print "General mean MULTIPLICATIVE"
+# result_mean_multiplicative = evaluate.get_database_mean(recs_multiplicative['movieId'], ratings,6)
 # print result_mean_multiplicative
 
-
-# binary_mean_average = []
-# for item in result_mean_average:
-# 	if item > 3.5:
-# 		binary_mean_average.append(1)
-# 	else:
-# 		binary_mean_average.append(0)
-
-# print "Binary Average: "
-# print binary_mean_average
+# print "General mean AVERAGE WITHOUT MISERY"
+# result_mean_average_without_misery = evaluate.get_database_mean(recs_average_without_misery['movieId'], ratings,10)
+# print result_mean_average_without_misery
 
 
-# average_scores = recs_average['score']
+# print "> > precision AVE"
+# print evaluate.binary_precision(result_mean_average, 3.9)
 
-# print "Scores Average: "
-# print average_scores
+# print "> > precision LEAST"
+# print evaluate.binary_precision(result_mean_least_misery, 3.9)
 
-# mapped_average_scrore = map(lambda x : int(x*10), average_scores)
+# print "> > precision MOST"
+# print evaluate.binary_precision(result_mean_most_pleasure, 3.9)
 
-# print "Scores Average MApped: "
-# print mapped_average_scrore
+# print "> > precision MULTIPLICATIVE"
+# print evaluate.binary_precision(result_mean_multiplicative, 3.9)
 
-# returned_movies = [1,1,1,1,1,1,1,1,1,1]
+# print "> > precision WITHOUT"
+# print evaluate.binary_precision(result_mean_average_without_misery, 3.9)
 
-# my_precision = precision_score(binary_mean_average, returned_movies)
-
-# print "My precision"
-# print my_precision
-
-
-# to_predict = gl.SFrame({'movieId': [4], 'title': ['D'], 'genres': [['Comedy','Terror']]})
-
-# for recs_item in movies_recs_multiplicative:
-# 	to_predict = to_predict.append(items[items['movieId'] == recs_item])
-# 	print "Entrou aqui?"
-
-# print "U U U U U U U U U U U u"
-# # print items[items['movieId'] == 480]
-# to_predict = to_predict[1:]
-# print to_predict
-
-
-
-
-
-# print "% % % % % % MY RECS --------->"
-# print "AVERAGE"
-# print recs_average
-# print "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
-# print "LEAST"
-# print recs_least_misery
-# print "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
-# print "MOST"
-# print recs_most_pleasure
-# print "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
-# print "MULTI"
-# print recs_multiplicative
-# print "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
-# print "WITHOUT"
-# print recs_average_without_misery
-# print "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
-
-# newItems=items.copy()
-
-# contentTrain = gl.item_content_recommender.create(newItems, 'movieId', train_content, 'userId', target='rating')
-# evalPrecisionRecall = contentTrain.evaluate_precision_recall(test_content)
-# evalRMSE = contentTrain.evaluate_rmse(test_content, target='rating')
-# eval = contentTrain.evaluate(test_content)
-# print(eval)
-
-
-# print "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-
-# print newItems['year'].sketch_summary()
-# print newItems['genres'].sketch_summary()
-# print newItems['title'].sketch_summary()
-
-
-# for key, value in random_strat.iteritems():
-# 	print '<---------------------------------------------------------------------------->'
-# 	print '<---- Recommending based on the "%s" with the random groups ---->'% key
-# 	print '<---------------------------------------------------------------------------->'
-# 	movie_group['rating'] = value
-# 	print movie_group['rating']
-# 	print model_content.recommend(users=[98765], new_observation_data=movie_group).join(items, on='movieId').sort('rank')
-
-# ## Use the following lines to fast load your data in SFrame format
-# same_items_data = gl.load_sframe('data/items_data')
-# same_ratings_data = gl.load_sframe('data/ratings_data')
-
-# same_items_data
-# same_ratings_data
