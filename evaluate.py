@@ -23,9 +23,6 @@ def binary_precision(result_mean, cutoff):
 		else:
 			binary_mean.append(0)
 
-	print "Binary Average: "
-	print binary_mean
-
 	returned_movies = [1,1,1,1,1,1,1,1,1,1]
 
 	return precision_score(binary_mean, returned_movies)
