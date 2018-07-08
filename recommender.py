@@ -144,8 +144,8 @@ fixed_group = [73,130,577,243,328]
 # GRUPO 09
 fixed_group = [509,311,77,345,213]
 
-# GRUPO 10
-fixed_group = [130,355,78,430,111]
+# # GRUPO 10
+# fixed_group = [130,355,78,430,111]
 
 
 print ""
@@ -160,7 +160,8 @@ print " = = = = RANDOM GROUP = = = = "
 print "User ids: %s" % random_group
 random_rates_m = []
 
-movie_list = [1721, 110, 480, 364, 260]
+movie_list = [1721, 110, 480, 364]
+# movie_list = [1721, 110, 480, 364, 260]
 # movie_list = [1721, 110, 364, 260, 71379]
 for m in movie_list:
 	m_frame = ratings.filter_by(m,'movieId')
@@ -265,7 +266,7 @@ recs_average_without_misery = model_content.recommend(users=[98765], new_observa
 
 
 precision_at = 10
-cutoff = 3.9
+cutoff = 3.0
 
 print "oi"
 print "User ids: %s" % fixed_group
@@ -275,22 +276,27 @@ print "oi"
 print "General mean AVERAGE"
 result_mean_average = evaluate.run_precision_at(recs_average['movieId'], ratings, precision_at, cutoff)
 print result_mean_average
+print ""
 
 print "General mean LEAST MISERY"
 result_mean_least_misery = evaluate.run_precision_at(recs_least_misery['movieId'], ratings, precision_at, cutoff)
 print result_mean_least_misery
+print ""
 
 print "General mean MOST PLEASURE"
 result_mean_most_pleasure = evaluate.run_precision_at(recs_most_pleasure['movieId'], ratings, precision_at, cutoff)
 print result_mean_most_pleasure
+print ""
 
 print "General mean MULTIPLICATIVE"
 result_mean_multiplicative = evaluate.run_precision_at(recs_multiplicative['movieId'], ratings, precision_at, cutoff)
 print result_mean_multiplicative
+print ""
 
 print "General mean AVERAGE WITHOUT MISERY"
 result_mean_average_without_misery = evaluate.run_precision_at(recs_average_without_misery['movieId'], ratings, precision_at, cutoff)
 print result_mean_average_without_misery
+print ""
 
 
 
