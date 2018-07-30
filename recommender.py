@@ -23,72 +23,10 @@ items['title'] = items['title'].apply(lambda x: x[:-7])
 items['genres'] = items['genres'].apply(lambda x: x.split('|'))
 
 items.remove_column('year')
-
-print ">>>>>>>>>>>>>>>> NEW ITEEEEEEEMS"
-print items
 # items.save('data/items_data')
 
 print "===== ITENS_CLEANNED ====="
 print items
-
-print "@ @ @ @ @ @"
-print ratings['movieId'].unique().size()
-
-# ratings.show()
-
-
-
-
-
-# print " = = = = = = = = = = = = = = = = = = = = = = "
-# print "          - MODEL BASED ON ITEM_SIMILARITY -         "
-# print " = = = = = = = = = = = = = = = = = = = = = = "
-# training_data, validation_data = gl.recommender.util.random_split_by_user(ratings, 'userId', 'movieId')
-# model = gl.recommender.create(training_data, 'userId', 'movieId')
-
-# print " = = = = = = = EVALUATING ITEM_SIMILARITY MODEL = = = = = = = ="
-# evalPrecisionRecall = model.evaluate_precision_recall(validation_data)
-# evalRMSE = model.evaluate_rmse(validation_data, target='rating')
-# eval = model.evaluate(validation_data)
-# print(eval)
-
-# # print model
-
-# # print "U U U U U U U U U U U u"
-# # print items[items['movieId'] == 12]
-
-# print "There can be more Itens than Rated Itens..."
-# print ratings['movieId'].unique().size()
-# print items['movieId'].unique().size()
-
-# # print "/ / / / / / / / /"
-# # print model.get_similar_items([12], k=5)
-
-# # print "\ \ \ \ \ \ \ \ \\"
-# # print model.get_similar_items([12]).join(items, on={'similar': 'movieId'}).sort('rank')
-
-
-# # You can now make recommendations for all the users you've just trained on
-# # results = model.recommend(users=[2])
-# # print "@-@-@-@-@-@"
-# # print results
-
-# # print " - - - - Big Merge - - - -"
-# # print ratings[ratings['userId'] == 2].join(items, on='movieId')
-
-# # print "= = = = Recommendations to userId 2 merging item and rating tables = = = ="
-# # print model.recommend(users=[2], k=20).join(items, on='movieId').sort('rank')
-
-# recent_data = gl.SFrame()
-# recent_data['movieId'] = [595, 597, 12]   # Indiana Jones and the Last Crusade
-# recent_data['rating'] = [3.0, 4.0, 4.5]
-# recent_data['userId'] = 99999
-
-# print " = = = = = RECS For userId 99999 - BASED ON ITEM_SIMILARITY = = = = = = "
-# print model.recommend(users=[99999], new_observation_data=recent_data).join(items, on='movieId').sort('rank')
-
-
-
 
 
 
@@ -99,23 +37,16 @@ print " = = = = = = = = = = = = = = = = = = = = = = "
 # print items[items['movieId'] == 597]
 # print items[items['movieId'] == 12]
 
-# model_content = gl.recommender.item_content_recommender.get_default_options()
 train_content, test_content = gl.recommender.util.random_split_by_user(ratings, 'userId', 'movieId')
 model_content = gl.recommender.item_content_recommender.create(items, 'movieId', ratings, 'userId', 'rating',similarity_metrics='pearson')
-print " = = = = = RECS For userId 99999 - BASED ON ITEM CONTENT = = = = = = "
-# print model_content.recommend(users=[99999], new_observation_data=recent_data).join(items, on='movieId').sort('rank')
 
-# print model_content.recommend_from_interactions([0])
 
-#>>>use this to export SFrame into json
-#ratings.export_json('data/ratings.json', orient='records')
 print " = = = = = Initializing Group = = = = = "
 # matrix = g.group_by_rated_movies(5, ratings,gl.aggregate)
 # print matrix
 user_file = gl.SFrame.read_json('data/users_rated_5_movies.json')
 user_list = list(user_file['userId'])
 
-#fixed group
 
 
 fixed_group = user_list[:5]
@@ -297,42 +228,3 @@ print "General mean AVERAGE WITHOUT MISERY"
 result_mean_average_without_misery = evaluate.run_precision_at(recs_average_without_misery['movieId'], ratings, precision_at, cutoff)
 print result_mean_average_without_misery
 print ""
-
-
-
-# print "General mean AVERAGE"
-# result_mean_average = evaluate.get_database_mean(recs_average['movieId'], ratings,3)
-# print result_mean_average
-
-# print "General mean LEAST MISERY"
-# result_mean_least_misery = evaluate.get_database_mean(recs_least_misery['movieId'], ratings,4)
-# print result_mean_least_misery
-
-# print "General mean MOST PLEASURE"
-# result_mean_most_pleasure = evaluate.get_database_mean(recs_most_pleasure['movieId'], ratings,5)
-# print result_mean_most_pleasure
-
-# print "General mean MULTIPLICATIVE"
-# result_mean_multiplicative = evaluate.get_database_mean(recs_multiplicative['movieId'], ratings,6)
-# print result_mean_multiplicative
-
-# print "General mean AVERAGE WITHOUT MISERY"
-# result_mean_average_without_misery = evaluate.get_database_mean(recs_average_without_misery['movieId'], ratings,10)
-# print result_mean_average_without_misery
-
-
-# print "> > precision AVE"
-# print evaluate.binary_precision(result_mean_average, 3.9)
-
-# print "> > precision LEAST"
-# print evaluate.binary_precision(result_mean_least_misery, 3.9)
-
-# print "> > precision MOST"
-# print evaluate.binary_precision(result_mean_most_pleasure, 3.9)
-
-# print "> > precision MULTIPLICATIVE"
-# print evaluate.binary_precision(result_mean_multiplicative, 3.9)
-
-# print "> > precision WITHOUT"
-# print evaluate.binary_precision(result_mean_average_without_misery, 3.9)
-
