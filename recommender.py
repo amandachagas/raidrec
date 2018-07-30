@@ -120,31 +120,31 @@ user_list = list(user_file['userId'])
 
 fixed_group = user_list[:5]
 
-# GRUPO 02
-fixed_group = [77,596,442,243,627]
+# # GROUP 02
+# fixed_group = [77,596,442,243,627]
 
-# GRUPO 03
-fixed_group = [355,130,213,30,111]
+# # GROUP 03
+# fixed_group = [355,130,213,30,111]
 
-# GRUPO 04
-fixed_group = [627,596,388,306,311]
+# # GROUP 04
+# fixed_group = [627,596,388,306,311]
 
-# GRUPO 05
-fixed_group = [292,430,509,294,577]
+# # GROUP 05
+# fixed_group = [292,430,509,294,577]
 
-# GRUPO 06
-fixed_group = [15,355,562,243,294]
+# # GROUP 06
+# fixed_group = [15,355,562,243,294]
 
-# GRUPO 07
-fixed_group = [306,328,353,311,159]
+# # GROUP 07
+# fixed_group = [306,328,353,311,159]
 
-# GRUPO 08
-fixed_group = [73,130,577,243,328]
+# # GROUP 08
+# fixed_group = [73,130,577,243,328]
 
-# GRUPO 09
-fixed_group = [509,311,77,345,213]
+# # GROUP 09
+# fixed_group = [509,311,77,345,213]
 
-# # GRUPO 10
+# # GROUP 10
 # fixed_group = [130,355,78,430,111]
 
 
@@ -264,7 +264,7 @@ recs_multiplicative = model_content.recommend(users=[98765], new_observation_dat
 movie_group['rating'] = group_average_without_misery
 recs_average_without_misery = model_content.recommend(users=[98765], new_observation_data=movie_group).join(items, on='movieId').sort('rank')
 
-
+## ---------- DEFINING HERE THE CUTOFF AND PRECISION_AT VALUES ----------- #
 precision_at = 10
 cutoff = 3.0
 
